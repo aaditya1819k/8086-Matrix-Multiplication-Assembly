@@ -1,0 +1,134 @@
+dosseg
+.model small
+.stack 100h
+.data
+
+     ;--------------matrix 1-----------------
+arr1 dw 01h,01h
+     dw 02h,02h
+     
+     
+     ;--------------matrix 2-----------------
+arr2 dw 02h,02h
+     dw 01h,01h
+
+     
+     ;--------------Result matrix -----------------     
+arr3 dw 4 dup(?) 
+         
+     
+
+
+
+.code
+main proc
+mov ax,@data
+mov ds,ax
+
+
+
+ mov si,offset arr1
+mov di,offset arr2
+mov bx,offset arr3
+mov cx,2
+xor bp,bp
+
+
+
+Sum1:
+  mov ax, [si]        ; Load value from arr1 into ax
+  mov dx, [di]        ; Load value from arr2 into dx
+  mul dx              ; Multiply ax by dx, result in ax:dx
+  add bp, ax
+  add si, 2    ; Next element on 1st row of ARR1
+  add di, 4    ; Next element in 1st column of ARR2
+  dec cx
+  jnz Sum1
+  
+  mov [bx], bp ; Store in R(0,0)
+  
+  
+  ;--------------1st row second column--------------
+  
+  
+mov si,offset arr1
+mov di,offset arr2 +2
+mov bx,offset arr3  
+mov cx,2
+xor bp,bp
+
+
+
+Sum2:
+  mov ax, [si]        ; Load value from arr1 into ax
+  mov dx, [di]        ; Load value from arr2 into dx
+  mul dx              ; Multiply ax by dx, result in ax:dx
+  add bp, ax
+  add si, 2    ; Next element on 1st row of ARR1
+  add di, 4    ; Next element in 1st column of ARR2
+  dec cx
+  jnz Sum2
+  
+ mov [bx+1], bp ; Store in R(0,1)
+ 
+ 
+  ;--------------2nd row 1st column--------------
+  
+mov si,offset arr1 +4
+mov di,offset arr2
+mov bx,offset arr3
+mov cx,2
+xor bp,bp
+
+
+
+Sum3:
+  mov ax, [si]        ; Load value from arr1 into ax
+  mov dx, [di]        ; Load value from arr2 into dx
+  mul dx              ; Multiply ax by dx, result in ax:dx
+  add bp, ax
+  add si, 2    ; Next element on 1st row of ARR1
+  add di, 4    ; Next element in 1st column of ARR2
+  dec cx
+  jnz Sum3
+  
+  mov [bx+2], bp ; Store in R(1,0)
+  
+  
+  
+    ;--------------2nd row 2nd column--------------
+mov si,offset arr1 +4
+mov di,offset arr2 +2
+mov bx,offset arr3
+mov cx,2
+xor bp,bp
+
+
+
+Sum4:
+  mov ax, [si]        ; Load value from arr1 into ax
+  mov dx, [di]        ; Load value from arr2 into dx
+  mul dx              ; Multiply ax by dx, result in ax:dx
+  add bp, ax
+  add si, 2    ; Next element on 1st row of ARR1
+  add di, 4    ; Next element in 1st column of ARR2
+  dec cx
+  jnz Sum4
+  
+  mov [bx+3], bp ; Store in R(1,1)
+  
+  
+  
+ 
+  
+  mov ah,4ch
+  int 21h
+
+  
+  
+  
+
+main endp
+end main 
+
+
